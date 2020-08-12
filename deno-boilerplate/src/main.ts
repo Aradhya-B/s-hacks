@@ -1,5 +1,5 @@
 import {log} from "./log.ts";
-import {Application, Router} from 'https://deno.land/x/oak@v4.0.0/mod.ts';
+import {Application, Router} from 'https://deno.land/x/oak/mod.ts';
 
 const main = async () => {
   const app = new Application();
