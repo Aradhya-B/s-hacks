@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 import {MONGODB_URI} from './config/keys';
+import imap from './mailListener';
 
 const PORT = process.env.PORT || 8000;
 
@@ -30,5 +31,6 @@ mongoose
     (err: any) => console.log('DB connection failed')
   );
 
-app.listen(PORT, () => console.log("listening on port: " + PORT.toString()));
+imap.connect();
 
+app.listen(PORT, () => console.log("listening on port: " + PORT.toString()));
