@@ -6,3 +6,9 @@ const router = new Router();
 router.get('/bills', getBills);
 
 export default router;
+
+import * as express from 'express';
+
+const router = express.Router();
+
+router.use('/bills',)
