@@ -6,5 +6,5 @@ export default interface User {
   scotia_id: number,
   name: string,
   bills: Bill[],
-  payee: Payee
+  payee: Payee[],
 }
