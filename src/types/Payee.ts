@@ -1,4 +1,4 @@
-export interface Payee {
+export default interface Payee {
   account_number: number,
   name: string,
   last_paid_date: Date,

@@ -1,7 +1,7 @@
-import {Bill} from './Bill'
-import {Payee} from './Payee';
+import Bill from './Bill.ts';
+import Payee from './Payee.ts';
 
-export interface User {
+export default interface User {
   email: string,
   scotia_id: number,
   name: string,

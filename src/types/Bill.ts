@@ -1,4 +1,4 @@
-export interface Bill {
+export default interface Bill {
   amount: number,
   due_date: Date,
   payee_id: number,

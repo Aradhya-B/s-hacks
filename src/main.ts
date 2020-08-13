@@ -1,14 +1,9 @@
 import {log} from "./log.ts";
-import {Application, Router} from 'https://deno.land/x/oak/mod.ts';
+import {Application} from 'https://deno.land/x/oak/mod.ts';
+import router from './routes/routing.ts';
 
 const main = async () => {
   const app = new Application();
-  const router = new Router();
-
-  router.get('/', context => {
-    context.response.body = 'Hello world!';
-
-  });
 
   app.use(router.routes());
 
