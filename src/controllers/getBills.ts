@@ -1,6 +1,6 @@
-import Bill from '../types/Bill.ts';
+import {IBill} from '../models/Bill';
 
-let bills: Bill[];
+let bills: Array<IBill>;
 
 const getBills = ({response}: {response: any}) => {
   response.body = {

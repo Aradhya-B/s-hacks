@@ -1,13 +1,13 @@
-import mongoose, {Schema, Document} from 'mongoose':
-import {Bill} from './Bill.ts';
-import {Payee} from './Payee.ts';
+import {Schema, Document, model} from 'mongoose';
+import {BillSchema, IBill} from './Bill';
+import {PayeeSchema, IPayee} from './Payee';
 
-interface User {
+interface IUser extends Document {
   email: string,
   scotia_id: string,
   name: string,
-  bills: Bill[],
-  payees: Payee[],
+  bills: IBill[],
+  payees: IPayee[],
 }
 
 const UserSchema: Schema = new Schema({
@@ -21,11 +21,11 @@ const UserSchema: Schema = new Schema({
     type: String
   },
   bills: {
-    type: Array<Bill>
+    type: [BillSchema]
   },
   payees: {
-    type: Array<Payee>
+    type: [PayeeSchema]
   },
 })
 
-export default mongoose.model<User>('User', UserSchema);
+export default model<IUser>('User', UserSchema);

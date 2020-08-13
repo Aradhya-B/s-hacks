@@ -1,13 +1,13 @@
-import mongoose, {Schema, Document} from 'mongoose':
+import {Schema, Document, model} from 'mongoose';
 
-export interface Payee extends Document {
+export interface IPayee extends Document {
   account_number: string,
   name: string,
   last_paid_date: Date,
   last_paid_value: number,
 }
 
-const PayeeSchema: Schema = new Schema({
+export const PayeeSchema: Schema = new Schema({
   account_number: {
     type: String
   },
@@ -22,4 +22,4 @@ const PayeeSchema: Schema = new Schema({
   },
 })
 
-export default mongoose.model<Payee>('Payee', PayeeSchema);
+export default model<IPayee>('Payee', PayeeSchema);

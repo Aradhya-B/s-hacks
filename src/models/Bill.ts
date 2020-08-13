@@ -1,6 +1,6 @@
-import mongoose, {Schema, Document} from 'mongoose':
+import {model, Schema, Document} from 'mongoose';
 
-export interface Bill extends Document {
+export interface IBill extends Document {
   amount: number,
   due_date: Date,
   payee_id: string,
@@ -10,7 +10,7 @@ export interface Bill extends Document {
   paid_date: Date,
 }
 
-const BillSchema: Schema = new Schema({
+export const BillSchema: Schema = new Schema({
   amount: {
     type: Number,
   },
@@ -34,4 +34,4 @@ const BillSchema: Schema = new Schema({
   },
 })
 
-export default mongoose.model<Bill>('Bill', BillSchema);
+export default model<IBill>('Bill', BillSchema);
