@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:quick_bill/Bill.dart';
+import 'package:quick_bill/quick_bill_icons_icons.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 import 'package:http/http.dart' as http;
 import "dart:convert";
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 // consts
+final moneyFormat = new NumberFormat("#,##0.00", "en_US");
 
 BoxDecoration tileDecoration = BoxDecoration(
   color: Colors.grey[900],
@@ -87,7 +90,19 @@ class ForwardingTile extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text("Forwarding Settings"),
+            child: Row(
+              children: [
+                Icon(
+                  QuickBillIcons.settings_24px,
+                  color: Colors.purple,
+                ),
+                SizedBox(width: 20),
+                Text(
+                  "Forwarding Settings",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
           ),
         ),
         decoration: tileDecoration);
@@ -107,43 +122,72 @@ class Bills extends StatelessWidget {
       _total += element.amount;
     });
 
-    return Container(
-      decoration: tileDecoration,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
+    if (bills.length > 0) {
+      return Container(
+        decoration: tileDecoration,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 39.0, top: 24),
+                child: Text(
+                  "Forwarded Bills",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ),
+              alignment: Alignment.centerLeft,
+            ),
+            billDivider,
+            SizedBox(height: 4),
+            ListView.separated(
+              itemCount: bills.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return BillTile(
+                    name: bills[index].description,
+                    amount: bills[index].amount);
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: billDivider,
+                );
+              },
+            ),
+            SizedBox(height: 30),
+            TotalTile(amount: _total),
+            SizedBox(height: 40),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(top: 120.0),
+        child: Center(
+          child: Container(
+            decoration: tileDecoration,
             child: Padding(
-              padding: const EdgeInsets.only(left: 39.0, top: 24),
-              child: Text(
-                "Forwarded Bills",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+              padding: const EdgeInsets.fromLTRB(16, 32, 16, 48),
+              child: Column(
+                children: [
+                  Text(
+                    "No Bills",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  billDivider,
+                  Text(
+                    "You have no bills! Send an email with a bill attachment to scotiabank.alakazam.abansal@gmail.com \n for quick bill to process your bill.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
               ),
             ),
-            alignment: Alignment.centerLeft,
           ),
-          billDivider,
-          SizedBox(height: 4),
-          ListView.separated(
-            itemCount: bills.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return BillTile(
-                  name: bills[index].description, amount: bills[index].amount);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: billDivider,
-              );
-            },
-          ),
-          SizedBox(height: 30),
-          TotalTile(amount: _total),
-          SizedBox(height: 40),
-        ],
-      ),
-    );
+        ),
+      );
+    }
   }
 }
 
@@ -165,7 +209,7 @@ class BillTile extends StatelessWidget {
               this.name,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
             ),
-            Text("\$${(amount / 10).toStringAsFixed(2)}"),
+            Text("\$${moneyFormat.format((amount / 100))}"),
           ],
         ),
         SizedBox(height: 2.5),
@@ -214,7 +258,7 @@ class TotalTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 120.0),
               child: Text(
-                "\$${(amount / 10).toStringAsFixed(2)}",
+                "\$${moneyFormat.format((amount / 100))}",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 17,
@@ -249,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<Bill> bills = [];
 
       http.Response response =
-          await http.get("http://84020ad6a309.ngrok.io/api/bills");
+          await http.get("http://29fccd75f166.ngrok.io/api/bills");
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
@@ -379,19 +423,22 @@ class _MyHomePageState extends State<MyHomePage> {
         showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(QuickBillIcons.home_24px_outlined),
             title: Text("Home"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.rotate_left),
+            icon: Icon(QuickBillIcons.loop_24px_outlined),
             title: Text("Transfer"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pages),
+            icon: Icon(QuickBillIcons.bill_1),
             title: Text("Bills"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.more),
+            icon: Icon(
+              QuickBillIcons.notes_24px,
+              size: 14,
+            ),
             title: Text("More"),
           ),
         ],

@@ -14,14 +14,14 @@ function parseDetections(detections: any) {
   for (let i = 0; i < detections.length; i++) {
     const description = detections[i].description;
     if (description === 'Scotiabank') {
-      name = 'Scotiabank Gold American Express Card';
-      amount = 1600
+      name = 'Scotiabank Gold';
+      amount = 1699
       dueDate = 'Aug-24-2020'
       break;
     }
     if (description === 'Richmond') {
       name = 'Richmond Hill Taxes';
-      amount = 3066.68 * 1000;
+      amount = 3066.68 * 100;
       dueDate = 'Aug-04-2020'
       break;
     }
