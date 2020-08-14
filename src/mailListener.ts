@@ -16,7 +16,7 @@ const imap = new Imap({
   }
 });
 
-const base64 = new Base64Decode();
+
 
 function openInbox(cb: any) {
   imap.openBox('INBOX', true, cb);
@@ -55,9 +55,14 @@ function buildAttMessageFunction(attachment: any) {
           filepath: filename
         });
       }).on('open', async () => {
+        console.log("in  open");
         if (toUpper(encoding) === 'BASE64') {
           //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
+          const base64 = new Base64Decode();
           await stream.pipe(base64).pipe(writeStream);
+          console.log("after pipe");
+
+          // console.log("after stream close");
         } else {
           stream.pipe(writeStream);
         }
@@ -120,7 +125,7 @@ function getLatestMessageContent(box: any) {
   });
   f.once('end', function () {
     console.log('Done fetching all messages!');
-    imap.end();
+    // imap.end();
   });
 }
 

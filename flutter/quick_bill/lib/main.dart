@@ -293,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<Bill> bills = [];
 
       http.Response response =
-          await http.get("http://29fccd75f166.ngrok.io/api/bills");
+          await http.get("http://localhost:8000/api/bills");
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
