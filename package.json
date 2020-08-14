@@ -52,6 +52,7 @@
     "express": "^4.17.1",
     "helmet": "^4.0.0",
     "imap": "^0.8.19",
+    "line-segmentation-algorithm-to-gcp-vision": "^1.0.2",
     "mongoose": "^5.9.28",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",

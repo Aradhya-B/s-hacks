@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'request';
 import {COMPUTER_VISION_SUBSCRIPTION_KEY, COMPUTER_VISION_ENDPOINT} from '../config/keys';
 import * as vision from '@google-cloud/vision';
+import * as algorithm from 'line-segmentation-algorithm-to-gcp-vision';
 const uriBase = COMPUTER_VISION_ENDPOINT + 'vision/v3.0/ocr';
 const router = express.Router();
 
@@ -23,13 +24,16 @@ router.post('/upload', async (req, res) => {
   console.log("starting");
   const client = new vision.ImageAnnotatorClient();
 
-  const [result] = await client.textDetection('./files/' + filepath);
+  const [result] = await client.documentTextDetection('./files/' + filepath);
   console.log(JSON.stringify(result));
+
+  /* console.log(algorithm.initLineSegmentation(result[0]['responses'][0])); */
+
   const detections = result.textAnnotations;
   console.log('Text:');
   /* parseDetections(detections) */
-  /* detections.forEach(text => text.description ? console.log(text.description) : console.log('nothing')); */
-  detections.forEach(text => console.log(text));
+  /* /1* detections.forEach(text => text.description ? console.log(text.description) : console.log('nothing')); *1/ */
+  /* detections.forEach(text => console.log(text)); */
   console.log('Ended');
 })
 
