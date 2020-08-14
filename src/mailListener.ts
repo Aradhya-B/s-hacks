@@ -53,7 +53,7 @@ function buildAttMessageFunction(attachment: any) {
       }).on('open', async () => {
         if (toUpper(encoding) === 'BASE64') {
           //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
-          stream.pipe(base64).pipe(writeStream);
+          await stream.pipe(base64).pipe(writeStream);
           axios.post('http://localhost:8000/api/bills/upload', {
             /* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') */
             filepath: filename
