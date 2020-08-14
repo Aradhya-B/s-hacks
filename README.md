@@ -1,31 +1,20 @@
-# Deno Boilerplate
+# QuickBill
 
-This is a very basic Deno Boilerplate.
+Built for S:Hacks 2020
 
-It does not much. The only goal is to not have to setup and created a basic setup.
+## Description
+QuickBill is our solution to disrupt the traditional process of bill payments, by providing the payments services of a branch in the palm of your hand. We harnessed the power of machine learning optical and image recognition to provide a bill payment solution that is as easy as it can be! You can forward your bills via email to the QuickBill Scotiabank Inbox for processing, or you can take a picture of the bill within the app as well! It's that easy- leave the account number, due date, and payee finding to us. You can check out our design mockups in Figma ![here](https://www.figma.com/proto/okoDeV5sWxdPqelHvZaTmT/Scotia-Hacks?node-id=5%3A106&scaling=min-zoom).
 
-**Feel free to open pull requests!**
+## Tech Used
+- TypeScript
+- Node.js
+- MongoDB
+- Flutter/Dart
+- Google Cloud Vision
+- Optical Image Recognition
 
-## basic usage
+## Demo
+![Demo](./assets/QuickBillDemo.gif)
 
-This boilerplate uses `make` to run the Deno commands.
-It is usually already installed on your Unix OS.
-
-You can use the following commands:
-- `make run`:      executes the `index.ts`
-- `make test`:     runs the tests
-- `make format`:   formats all your files
-- `make debug`:    runs the debugger starting in the `index.ts`
-- `make bundle`:   bundles your project into a single file in `build/index`
-
-## Simple logger pre-configured
-
-In `src/log.ts` you can find a simple logger that is extendable.
-
-## ToDo
-
-- Overall extend the project
-- Think about a better developer experience
-- Think about a better folder structure
-- Create a companion CLI tool
-- Probably more...
+## Mobile App Screenshot
+![Mobile App](./assets/MobileApp.png)
