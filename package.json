@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/Aradhya-B/s-hacks#readme",
   "dependencies": {
+    "@google-cloud/vision": "^2.1.1",
     "@types/axios": "^0.14.0",
     "@types/base64-stream": "^1.0.0",
     "@types/cors": "^2.8.7",
