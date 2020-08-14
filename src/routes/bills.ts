@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from 'axios';
+import * as path from 'path';
 import request from 'request';
 import {COMPUTER_VISION_SUBSCRIPTION_KEY, COMPUTER_VISION_ENDPOINT} from '../config/keys';
 import * as vision from '@google-cloud/vision';
@@ -13,13 +14,13 @@ router.get('/', () => {
 
 
 router.post('/upload', async (req, res) => {
-  const base64String = req.body.base64String;
+  const filepath = req.body.filepath;
   console.log("starting");
   const client = new vision.ImageAnnotatorClient();
   /* console.log('-------------------d'); */
   /* console.log(base64String); */
 
-  const [result] = await client.textDetection(base64String);
+  const [result] = await client.textDetection('./files/' + filepath);
   const detections = result.textAnnotations;
   console.log('Text:');
   detections.forEach(text => console.log(text));
