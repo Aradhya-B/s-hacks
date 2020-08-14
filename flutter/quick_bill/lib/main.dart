@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:quick_bill/Bill.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
+import 'package:http/http.dart' as http;
+import "dart:convert";
 
 void main() {
   runApp(MyApp());
@@ -34,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         brightness: Brightness.dark,
         canvasColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -90,8 +95,18 @@ class ForwardingTile extends StatelessWidget {
 }
 
 class Bills extends StatelessWidget {
+  final List<Bill> bills;
+
+  Bills({this.bills});
+
   @override
   Widget build(BuildContext context) {
+    int _total = 0;
+
+    bills.forEach((element) {
+      _total += element.amount;
+    });
+
     return Container(
       decoration: tileDecoration,
       child: Column(
@@ -110,10 +125,11 @@ class Bills extends StatelessWidget {
           billDivider,
           SizedBox(height: 4),
           ListView.separated(
-            itemCount: 3,
+            itemCount: bills.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return BillTile(name: "Alectra Utilities", amount: 5000);
+              return BillTile(
+                  name: bills[index].description, amount: bills[index].amount);
             },
             separatorBuilder: (BuildContext context, int index) {
               return Padding(
@@ -123,7 +139,7 @@ class Bills extends StatelessWidget {
             },
           ),
           SizedBox(height: 30),
-          TotalTile(amount: 15000),
+          TotalTile(amount: _total),
           SizedBox(height: 40),
         ],
       ),
@@ -223,11 +239,61 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List<Bill> _bills = [];
 
-  void _incrementCounter() {
+  bool _paid = false;
+  bool _loading = false;
+
+  Future<void> fetchBills() async {
+    if (!_paid) {
+      List<Bill> bills = [];
+
+      http.Response response =
+          await http.get("http://84020ad6a309.ngrok.io/api/bills");
+
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+
+        List<dynamic> data = json.decode(response.body);
+
+        data.forEach((billJson) {
+          bills.add(Bill.fromJson(billJson));
+        });
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        throw Exception('Failed to load bills');
+      }
+
+      setState(() {
+        _bills = bills;
+      });
+    }
+    return;
+  }
+
+  void pay() async {
     setState(() {
-      _counter++;
+      _loading = true;
+    });
+
+    await Future.delayed(Duration(seconds: 3));
+
+    setState(() {
+      _paid = true;
+      _loading = false;
+      _bills = [];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchBills();
+    Timer.periodic(new Duration(seconds: 3), (timer) {
+      fetchBills();
     });
   }
 
@@ -241,7 +307,14 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: Icon(Icons.help_outline),
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _paid = false;
+                    _loading = false;
+                  });
+                },
+                child: Icon(Icons.help_outline)),
           )
         ],
       ),
@@ -250,14 +323,37 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Stack(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+//              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 24),
                 TopNavBar(),
                 SizedBox(height: 24),
                 ForwardingTile(),
                 SizedBox(height: 24),
-                Bills(),
+                if (!_loading)
+                  if (!_paid)
+                    Bills(
+                      bills: _bills,
+                    )
+                  else
+                    Container()
+                else
+                  CircularProgressIndicator(),
+                if (_paid)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 150.0),
+                      child: Text(
+                        "All bills paid!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.greenAccent),
+                      ),
+                    ),
+                  )
+                else
+                  Container(),
               ],
             ),
             Align(
@@ -269,6 +365,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: Colors.grey[900],
                   textStyle: TextStyle(color: Colors.white, fontSize: 18),
                   text: "Slide to pay all",
+                  onConfirmation: pay,
                 ),
               ),
             ),
