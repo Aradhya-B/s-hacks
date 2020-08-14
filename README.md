@@ -1,5 +1,4 @@
 # QuickBill
-
 Built for S:Hacks 2020
 
 ## Description
