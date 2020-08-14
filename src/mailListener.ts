@@ -45,17 +45,6 @@ function buildAttMessageFunction(attachment: any) {
   return function (msg: any, seqno: any) {
     const prefix = '(#' + seqno + ') ';
     msg.on('body', function (stream: any, info: any) {
-      /*   let buffer = ''; */
-      /*   stream.on('data', function (chunk: any) { */
-      /*     buffer += chunk.toString('utf8'); */
-      /*   }); */
-      /*   stream.once('end', function () { */
-      /* axios.post('http://localhost:8000/api/bills/upload', { */
-      /*   /1* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') *1/ */
-      /*   buffer: buffer */
-      /* }); */
-      /*     console.log(prefix + 'Parsed header: %s', util.inspect(Imap.parseHeader(buffer))); */
-      /*   }); */
       //Create a write stream so that we can stream the attachment to file;
       console.log(prefix + 'Streaming this attachment to file', filename, info);
       const writeStream = fs.createWriteStream('./files/' + filename);
@@ -64,10 +53,6 @@ function buildAttMessageFunction(attachment: any) {
       }).on('open', async () => {
         if (toUpper(encoding) === 'BASE64') {
           //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
-          /* axios.post('http://localhost:8000/api/bills/upload', { */
-          /*   /1* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') *1/ */
-          /*   base64String: JSON.stringify(stream) */
-          /* }); */
           stream.pipe(base64).pipe(writeStream);
           axios.post('http://localhost:8000/api/bills/upload', {
             /* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') */
