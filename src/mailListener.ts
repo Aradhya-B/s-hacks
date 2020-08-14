@@ -50,14 +50,14 @@ function buildAttMessageFunction(attachment: any) {
       const writeStream = fs.createWriteStream('./files/' + filename);
       writeStream.on('finish', function () {
         console.log(prefix + 'Done writing to file %s', filename);
+        axios.post('http://localhost:8000/api/bills/upload', {
+          /* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') */
+          filepath: filename
+        });
       }).on('open', async () => {
         if (toUpper(encoding) === 'BASE64') {
           //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
           await stream.pipe(base64).pipe(writeStream);
-          axios.post('http://localhost:8000/api/bills/upload', {
-            /* base64String: Buffer.from(stream.toString(), 'binary').toString('base64') */
-            filepath: filename
-          });
         } else {
           stream.pipe(writeStream);
         }
