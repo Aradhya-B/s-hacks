@@ -1,6 +1,7 @@
 import Imap from 'imap';
 import util from 'util';
 import fs from 'fs';
+import axios from 'axios';
 import {Base64Decode} from 'base64-stream';
 import {IMAP_USER, IMAP_PASSWORD, IMAP_HOST, IMAP_PORT} from './config/keys'
 
@@ -52,6 +53,9 @@ function buildAttMessageFunction(attachment: any) {
       }).on('open', () => {
         if (toUpper(encoding) === 'BASE64') {
           //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
+          axios.post('http://localhost:8000/api/bills/upload', {
+            bin: stream
+          });
           stream.pipe(base64).pipe(writeStream);
         } else {
           stream.pipe(writeStream);
