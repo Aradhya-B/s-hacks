@@ -12,20 +12,23 @@ router.get('/', () => {
 })
 
 
-router.get('/upload', async (req, res) => {
-    console.log("starting");
-    const client = new vision.ImageAnnotatorClient();
+router.post('/upload', async (req, res) => {
+  const base64String = req.body.base64String;
+  console.log("starting");
+  const client = new vision.ImageAnnotatorClient();
+  /* console.log('-------------------d'); */
+  /* console.log(base64String); */
 
-    const [result] = await client.textDetection("https://i.ibb.co/F0Y284J/IMG-20200813-213630.jpg");
-    const detections = result.textAnnotations;
-    console.log('Text:');
-    detections.forEach(text => console.log(text));
+  const [result] = await client.textDetection(base64String);
+  const detections = result.textAnnotations;
+  console.log('Text:');
+  detections.forEach(text => console.log(text));
 })
 
 
 router.get('/upload_old', (req, res) => {
   console.log("uploading..");
-//   const bin = req.body.bin;
+  //   const bin = req.body.bin;
   const params = {
     'language': 'unk',
     'detectOrientation': 'false'
@@ -41,7 +44,7 @@ router.get('/upload_old', (req, res) => {
   };
 
   console.log("data:-----");
-//   console.log(bin);
+  //   console.log(bin);
 
   request.post(options, (error, response, body) => {
     if (error) {
