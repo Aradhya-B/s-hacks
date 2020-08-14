@@ -5,11 +5,18 @@ import * as vision from '@google-cloud/vision';
 const uriBase = COMPUTER_VISION_ENDPOINT + 'vision/v3.0/ocr';
 const router = express.Router();
 
+function parseDetections(detections: any) {
+  detections.forEach((detection: any) => {
+    const description = detection.description;
+    const vertices = detection.boundingPoly.vertices;
+    console.log(description, vertices);
+  });
+}
+
 router.get('/', () => {
   console.log("bills");
 
 })
-
 
 router.post('/upload', async (req, res) => {
   const filepath = req.body.filepath;
@@ -17,9 +24,13 @@ router.post('/upload', async (req, res) => {
   const client = new vision.ImageAnnotatorClient();
 
   const [result] = await client.textDetection('./files/' + filepath);
+  console.log(JSON.stringify(result));
   const detections = result.textAnnotations;
   console.log('Text:');
+  /* parseDetections(detections) */
+  /* detections.forEach(text => text.description ? console.log(text.description) : console.log('nothing')); */
   detections.forEach(text => console.log(text));
+  console.log('Ended');
 })
 
 
