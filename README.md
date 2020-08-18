@@ -1,4 +1,4 @@
-# QuickBill
+# Quick Bill
 Built for S:Hacks 2020 (First Place Overall)
 
 [Our Video Pitch](https://www.youtube.com/watch?v=4V9y0LT-JV8)
